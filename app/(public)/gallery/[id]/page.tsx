@@ -1,0 +1,3 @@
+export default async function GalleryProjectPage({ params }: { params: { id: string } }) {
+  return <main className="mx-auto max-w-7xl px-5 py-16"><p className="eyebrow">Build Gallery / Case Study</p><h1 className="display mt-4">{params.id.replaceAll("-", " ")}</h1><div className="mt-10 grid gap-5 md:grid-cols-2"><div className="panel flex min-h-80 items-end bg-ink p-6 text-bone"><p className="font-bold uppercase tracking-widest text-ember">Blueprint</p></div><div className="panel flex min-h-80 items-end bg-walnut p-6 text-bone"><p className="font-bold uppercase tracking-widest text-ember">Physical Reality</p></div></div></main>;
+}

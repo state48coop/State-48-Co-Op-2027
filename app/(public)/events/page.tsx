@@ -1,0 +1,3 @@
+export default function EventsPage() {
+  return <main className="mx-auto max-w-7xl px-5 py-16"><p className="eyebrow">Community</p><h1 className="display mt-4">Make room<br /><span className="text-ember">for good things.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-black/65">Creative marketplaces, food truck nights, studio collaboration, and events that support Arizona makers.</p><div className="panel mt-10 p-8"><p className="text-xs font-bold uppercase tracking-widest text-ember">Coming soon</p><h2 className="mt-3 text-3xl font-black uppercase">State 48 Co-Op Events Hub</h2><p className="mt-3 max-w-xl leading-7 text-black/60">The events calendar and community tools will be managed from the new admin dashboard.</p></div></main>;
+}
