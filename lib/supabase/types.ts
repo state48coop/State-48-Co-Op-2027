@@ -25,6 +25,26 @@ export type ProductVariant = {
   sku: string;
 };
 
+export type Product = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  short_description: string;
+  base_price: number;
+  sku: string;
+  images: string[];
+  category: string;
+  collection: string;
+  product_type: string;
+  allow_engrave: boolean;
+  engrave_cost: number;
+  is_published: boolean;
+  archived: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
 type Table<Row, Insert = Row, Update = Partial<Row>> = {
   Row: Row;
   Insert: Insert;
@@ -40,9 +60,10 @@ export type Database = {
       product_attributes: Table<ProductAttribute, Omit<ProductAttribute, "id">, Partial<Omit<ProductAttribute, "id">>>;
       product_variants: Table<ProductVariant, Omit<ProductVariant, "id">, Partial<Omit<ProductVariant, "id">>>;
       projects: Table<Record<string, unknown>>;
-      products: Table<Record<string, unknown>>;
+      products: Table<Product, Omit<Product, "id" | "created_at" | "updated_at"> & { id?: string; created_at?: string; updated_at?: string }, Partial<Omit<Product, "id" | "created_at" | "updated_at">>>;
       events: Table<Record<string, unknown>>;
       ui_config: Table<Record<string, unknown>>;
+      project_intakes: Table<Record<string, unknown>>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
