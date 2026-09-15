@@ -49,11 +49,26 @@ export async function getAdminProduct(id: string) {
 }
 
 export async function getAdminDashboardStats() {
+  const overview = await getAdminDashboardOverview();
+  return overview.stats;
+}
+
+export async function getAdminDashboardOverview() {
   const supabase = createSupabaseServerClient() as any;
-  const [{ count: products }, { count: projects }, { count: intakes }] = await Promise.all([
-    supabase.from("products").select("id", { count: "exact", head: true }).eq("archived", false),
+  const [{ data: products }, { count: projects }, { count: intakes }, { data: variants }, { data: events }] = await Promise.all([
+    supabase.from("products").select("id,name,sku,base_price,images,is_published,archived,updated_at").order("updated_at", { ascending: false }),
     supabase.from("projects").select("id", { count: "exact", head: true }),
-    supabase.from("project_intakes").select("id", { count: "exact", head: true }).eq("status", "open")
+    supabase.from("project_intakes").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.from("product_variants").select("id,product_id,sku,stock,combination").order("stock", { ascending: true }).limit(12),
+    supabase.from("events").select("id,title,event_date,location,is_published").gte("event_date", new Date().toISOString()).order("event_date", { ascending: true }).limit(3)
   ]);
-  return { products: products ?? 0, projects: projects ?? 0, intakes: intakes ?? 0 };
+  const productRows = (products ?? []) as Array<{ id: string; name: string; sku: string; base_price: number; images: string[]; is_published: boolean; archived: boolean; updated_at: string }>;
+  const productNames = new Map(productRows.map((product) => [product.id, product.name]));
+  const lowStock = ((variants ?? []) as Array<{ id: string; product_id: string; sku: string; stock: number; combination: Record<string, string> }>).filter((variant) => variant.stock <= 2).slice(0, 6).map((variant) => ({ ...variant, product_name: productNames.get(variant.product_id) ?? "Product" }));
+  return {
+    stats: { products: productRows.filter((product) => !product.archived).length, projects: projects ?? 0, intakes: intakes ?? 0, drafts: productRows.filter((product) => !product.archived && !product.is_published).length, archived: productRows.filter((product) => product.archived).length, lowStock: lowStock.length },
+    recentProducts: productRows.slice(0, 6),
+    lowStock,
+    upcomingEvents: events ?? []
+  };
 }

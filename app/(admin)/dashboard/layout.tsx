@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const navGroups = [
-  { label: "Workspace", links: [["Overview", "/dashboard"], ["Products", "/dashboard/products"], ["Attributes", "/dashboard/attributes"]] },
+  { label: "Workspace", links: [["Overview", "/dashboard"], ["Products", "/dashboard/products"], ["Catalog import", "/dashboard/import"], ["Attributes", "/dashboard/attributes"]] },
   { label: "Operations", links: [["Gallery projects", "/dashboard/projects"], ["Project intakes", "/dashboard/intakes"], ["Events", "/dashboard/events"], ["Site content", "/dashboard/content"]] }
 ];
 
