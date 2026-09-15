@@ -11,6 +11,10 @@ export type ProjectSummary = {
   blueprint_url: string | null;
   final_img_url: string | null;
   tags: string[];
+  challenge: string | null;
+  execution: string | null;
+  is_published: boolean;
+  created_at: string;
 };
 
 export async function getPublishedProducts() {
@@ -22,9 +26,16 @@ export async function getPublishedProducts() {
 
 export async function getPublishedProjects() {
   const supabase = createSupabaseServerClient() as any;
-  const { data, error } = await supabase.from("projects").select("id,title,slug,category,blueprint_url,final_img_url,tags").eq("is_published", true).order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("projects").select("*").eq("is_published", true).order("created_at", { ascending: false });
   if (error) { console.error("Unable to load published projects", error); return [] as ProjectSummary[]; }
   return (data ?? []) as ProjectSummary[];
+}
+
+export async function getAdminProject(id: string) {
+  const supabase = createSupabaseServerClient() as any;
+  const { data, error } = await supabase.from("projects").select("*").eq("id", id).maybeSingle();
+  if (error) { console.error("Unable to load admin project", error); return null; }
+  return data as ProjectSummary | null;
 }
 
 export async function getAdminProduct(id: string) {
